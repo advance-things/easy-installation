@@ -136,11 +136,12 @@ docker run -d \
 
 # Get the IP address of the host
 HOST_IP=$(docker network inspect -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}' vaultwarden_network)
+domainname=$(echo "$DOMAIN" | sed -E 's/https?:\/\///; s/\/.*//')
 
 #ssl on domain
 wget https://raw.githubusercontent.com/thepwnexperts/advance-things/main/linux/vps/nginx-proxy/diff-host/ssl-hsts-http2/nginx-proxy-ssl.sh
 sudo chmod +x nginx-proxy-ssl.sh
-./nginx-subdomain.sh --hsts --http2 -d blog.example.com -p  -ph localhost
+./nginx-subdomain.sh --hsts --http2 -d $domainname -p  -ph localhost
 
 # Provide a useful message with the link to access the service
 echo "VaultWarden is now running and accessible at:"
