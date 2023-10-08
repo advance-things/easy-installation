@@ -1,24 +1,104 @@
 #!/bin/bash
 
+# Default values
+SMTP_HOST=""
+SMTP_FROM=""
+SMTP_FROM_NAME=""
+SMTP_SECURITY=""
+SMTP_PORT=""
+SMTP_USERNAME=""
+SMTP_PASSWORD=""
+DOMAIN=""
+ADMIN_TOKEN=""
+CUSTOM_PORT=""
+VOLUME_PATH=""
+
 # Create a Docker network if it doesn't exist
 docker network create vaultwarden_network 2>/dev/null || true
 
-# Prompt the user for SMTP configuration
-read -p "SMTP Host: " SMTP_HOST
-read -p "SMTP From: " SMTP_FROM
-read -p "SMTP From Name: " SMTP_FROM_NAME
-read -p "SMTP Security (e.g., starttls): " SMTP_SECURITY
-read -p "SMTP Port: " SMTP_PORT
-read -p "SMTP Username: " SMTP_USERNAME
-read -s -p "SMTP Password: " SMTP_PASSWORD
-echo # Newline for password input
+# Process command line arguments using getopts
+while getopts ":h:f:n:s:p:u:w:d:t:c:" opt; do
+  case $opt in
+    h)
+      SMTP_HOST="$OPTARG"
+      ;;
+    f)
+      SMTP_FROM="$OPTARG"
+      ;;
+    n)
+      SMTP_FROM_NAME="$OPTARG"
+      ;;
+    s)
+      SMTP_SECURITY="$OPTARG"
+      ;;
+    p)
+      SMTP_PORT="$OPTARG"
+      ;;
+    u)
+      SMTP_USERNAME="$OPTARG"
+      ;;
+    w)
+      SMTP_PASSWORD="$OPTARG"
+      ;;
+    d)
+      DOMAIN="$OPTARG"
+      ;;
+    t)
+      ADMIN_TOKEN="$OPTARG"
+      ;;
+    c)
+      CUSTOM_PORT="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      ;;
+  esac
+done
 
-# Prompt the user for other configuration parameters
-read -p "Domain (e.g., https://homevault.example.org): " DOMAIN
-read -p "Admin Token: " ADMIN_TOKEN
+# If a value is not provided through command line arguments, prompt the user
+if [ -z "$SMTP_HOST" ]; then
+  read -p "SMTP Host: " SMTP_HOST
+fi
 
-# Prompt the user for the port to map
-read -p "Port to map to 8062 (e.g., 8080): " CUSTOM_PORT
+if [ -z "$SMTP_FROM" ]; then
+  read -p "SMTP From: " SMTP_FROM
+fi
+
+if [ -z "$SMTP_FROM_NAME" ]; then
+  read -p "SMTP From Name: " SMTP_FROM_NAME
+fi
+
+if [ -z "$SMTP_SECURITY" ]; then
+  read -p "SMTP Security (e.g., starttls): " SMTP_SECURITY
+fi
+
+if [ -z "$SMTP_PORT" ]; then
+  read -p "SMTP Port: " SMTP_PORT
+fi
+
+if [ -z "$SMTP_USERNAME" ]; then
+  read -p "SMTP Username: " SMTP_USERNAME
+fi
+
+if [ -z "$SMTP_PASSWORD" ]; then
+  read -s -p "SMTP Password: " SMTP_PASSWORD
+  echo # Newline for password input
+fi
+
+if [ -z "$DOMAIN" ]; then
+  read -p "Domain (e.g., https://homevault.example.org): " DOMAIN
+fi
+
+if [ -z "$ADMIN_TOKEN" ]; then
+  read -p "Admin Token: " ADMIN_TOKEN
+fi
+
+if [ -z "$CUSTOM_PORT" ]; then
+  read -p "Port to map to 8062 (e.g., 8080): " CUSTOM_PORT
+fi
 
 # Define the absolute path for the volume
 VOLUME_PATH="$(pwd)/vw-data/"
