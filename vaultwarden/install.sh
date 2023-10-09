@@ -141,7 +141,7 @@ domainname=$(echo "$DOMAIN" | sed -E 's/https?:\/\///; s/\/.*//')
 #ssl on domain
 sudo wget https://raw.githubusercontent.com/thepwnexperts/advance-things/main/linux/vps/web-server/nginx-proxy/diff-host/ssl-hsts-http2/nginx-proxy-ssl.sh
 sudo chmod +x nginx-proxy-ssl.sh
-./nginx-proxy-ssl.sh --hsts --http2 --add_domain -d $domainname -p $CUSTOM_PORT -ph localhost
+./nginx-proxy-ssl.sh --add_domain -d $domainname -p $CUSTOM_PORT -ph localhost
 
 # Provide a useful message with the link to access the service
 echo "VaultWarden is now running and accessible at:"
