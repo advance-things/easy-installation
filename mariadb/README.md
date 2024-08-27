@@ -9,7 +9,7 @@ This script automates the setup of MariaDB on various Linux distributions. It in
 
 1. **Download the Script**:
    ```bash
-   wget https://github.com/advance-things/easy-installation/blob/main/mariadb/sql.sh
+   wget https://raw.githubusercontent.com/advance-things/easy-installation/main/mariadb/sql.sh
    ```
 
 2. **Make the Script Executable**:
@@ -25,12 +25,12 @@ This script automates the setup of MariaDB on various Linux distributions. It in
 
 Using `wget`:
 ```bash
-wget -O - https://github.com/advance-things/easy-installation/blob/main/mariadb/sql.sh | bash
+wget -O - https://raw.githubusercontent.com/advance-things/easy-installation/main/mariadb/sql.sh | bash
 ```
 
 Using `curl`:
 ```bash
-curl -sSL https://github.com/advance-things/easy-installation/blob/main/mariadb/sql.sh | bash
+curl -sSL https://raw.githubusercontent.com/advance-things/easy-installation/main/mariadb/sql.sh | bash
 ```
 
 ### Explanation:
